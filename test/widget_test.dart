@@ -1,9 +1,6 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// Smoke coverage for the universal POC switcher: every model button must be
+// present in the top bar, and tapping one must swap the hosted proof of
+// concept without taking the bar away.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,20 +8,32 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:careermate/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('universal bar exposes all three POC models', (WidgetTester tester) async {
+    await tester.pumpWidget(const CareerMateApp());
+    await tester.pump(const Duration(milliseconds: 250));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.text('POC-model-1'), findsOneWidget);
+    expect(find.text('POC-model-2'), findsOneWidget);
+    expect(find.text('POC-model-3'), findsOneWidget);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('tapping a model button swaps the running proof of concept', (WidgetTester tester) async {
+    await tester.pumpWidget(const CareerMateApp());
+    await tester.pump(const Duration(milliseconds: 250));
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await tester.tap(find.text('POC-model-3'));
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('POC-model-3'), findsOneWidget);
+
+    await tester.tap(find.text('POC-model-2'));
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('POC-model-2'), findsOneWidget);
+
+    // The hosted builds schedule short fade-in timers. Detach the tree and let
+    // the last frame's timers fire so the test leaves nothing pending.
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump(const Duration(seconds: 2));
   });
 }

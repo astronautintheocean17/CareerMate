@@ -4,7 +4,7 @@
 // ============================================================================
 
 import 'package:flutter/material.dart';
-import 'package:careermate/common/screens/landing-screen.dart';
+import 'package:careermate/common/screens/poc_switcher.dart';
 
 void main() {
   runApp(const CareerMateApp());
@@ -30,7 +30,7 @@ class CareerMateApp extends StatelessWidget {
         ),
         fontFamily: 'Roboto',
       ),
-      home: const LandingScreen(),
+      home: const PocSwitcher(),
     );
   }
 }
