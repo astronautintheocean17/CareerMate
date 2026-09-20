@@ -104,7 +104,7 @@ A **single-file Flutter pre-product explainer app** — the "concept to product"
 
 - `lib/main.dart` — app entry
 - `lib/common/screens/landing_screen.dart` — the entire concept app (sections, popups, guided tour, responsive layout)
-- `assets/images/icons/careermate-icon.png` — brand icon
+- `careermate/assets/icons/careermate-icon.png` — brand icon
 
 **No backend. No network calls. Zero external packages beyond `cupertino_icons`.**
 

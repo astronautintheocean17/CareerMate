@@ -1,41 +1,31 @@
 // ============================================================================
 //  CareerMate — Pre-Product Explainer App
 //  SIH26044 · Team Tech Vectors
-//  Single-file Flutter MVP · ZERO external packages
+//  Single-file Flutter MVP · 2026
 //  Path: careermate/lib/common/screens/landing_screen.dart
 // ============================================================================
 
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
-// ---------------------------------------------------------------------------
-//  DESIGN TOKENS — White · Blue · Black · Sandal · Green
-// ---------------------------------------------------------------------------
 class CMColors {
   CMColors._();
 
   static const Color white       = Color(0xFFFFFFFF);
   static const Color offWhite    = Color(0xFFF7F9FC);
-
   static const Color blue        = Color(0xFF1A4FD6);
   static const Color blueDeep    = Color(0xFF0B2B7A);
   static const Color blueSoft    = Color(0xFFE6EDFF);
-
   static const Color black       = Color(0xFF0B0F1A);
   static const Color ink         = Color(0xFF1B2233);
   static const Color slate       = Color(0xFF5A6478);
-
   static const Color sandal      = Color(0xFFF2E2C4);
   static const Color sandalDeep  = Color(0xFFD9BE8A);
   static const Color sandalSoft  = Color(0xFFFBF3E4);
-
   static const Color green       = Color(0xFF12A46A);
   static const Color greenSoft   = Color(0xFFE3F6EE);
 }
 
-// ---------------------------------------------------------------------------
-//  RESPONSIVE HELPERS
-// ---------------------------------------------------------------------------
 enum CMDevice { phone, tablet, desktop }
 
 class CMResponsive {
@@ -77,9 +67,6 @@ class CMResponsive {
   }
 }
 
-// ---------------------------------------------------------------------------
-//  MOTION — entrance animation controller wrapper
-// ---------------------------------------------------------------------------
 class CMFadeUp extends StatefulWidget {
   const CMFadeUp({
     super.key,
@@ -133,9 +120,6 @@ class _CMFadeUpState extends State<CMFadeUp> with SingleTickerProviderStateMixin
   }
 }
 
-// ---------------------------------------------------------------------------
-//  SHARED WIDGETS — chips, tags, cards, stat tiles, flow arrows
-// ---------------------------------------------------------------------------
 class CMPill extends StatelessWidget {
   const CMPill({
     super.key,
@@ -291,7 +275,7 @@ class CMStatTile extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             value,
-            style: TextStyle(
+            style: const TextStyle(
               color: CMColors.black,
               fontSize: 22,
               fontWeight: FontWeight.w800,
@@ -338,7 +322,7 @@ class CMInfoCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(20),
         child: Ink(
-          padding: const EdgeInsets.all(18),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: CMColors.white,
             borderRadius: BorderRadius.circular(20),
@@ -355,47 +339,54 @@ class CMInfoCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 42, height: 42,
+                width: 40, height: 40,
                 decoration: BoxDecoration(
                   color: accent.withOpacity(0.10),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, color: accent, size: 22),
+                child: Icon(icon, color: accent, size: 21),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 12),
               Text(
                 title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   color: CMColors.black,
-                  fontSize: 15,
+                  fontSize: 14.5,
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.2,
+                  height: 1.2,
                 ),
               ),
               const SizedBox(height: 6),
-              Text(
-                body,
-                style: const TextStyle(
-                  color: CMColors.slate,
-                  fontSize: 12.8,
-                  height: 1.5,
-                  fontWeight: FontWeight.w500,
+              Expanded(
+                child: Text(
+                  body,
+                  maxLines: 4,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: CMColors.slate,
+                    fontSize: 12.4,
+                    height: 1.4,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
               if (onTap != null) ...[
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
                 Row(
                   children: [
                     Text(
                       'Tap to explore',
                       style: TextStyle(
                         color: accent,
-                        fontSize: 12,
+                        fontSize: 11.5,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     const SizedBox(width: 4),
-                    Icon(Icons.arrow_forward_rounded, size: 14, color: accent),
+                    Icon(Icons.arrow_forward_rounded, size: 13, color: accent),
                   ],
                 ),
               ],
@@ -499,9 +490,6 @@ class CMFlowStep extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-//  POPUP / BOTTOM SHEET — the "lead" detail system
-// ---------------------------------------------------------------------------
 Future<void> showCMDetail(
   BuildContext context, {
   required String eyebrow,
@@ -688,9 +676,6 @@ Widget _buildBlock(CMDetailBlock b, Color accent) {
   }
 }
 
-// ---------------------------------------------------------------------------
-//  MAIN LANDING SCREEN
-// ---------------------------------------------------------------------------
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
 
@@ -700,7 +685,7 @@ class LandingScreen extends StatefulWidget {
 
 class _LandingScreenState extends State<LandingScreen> {
   final ScrollController _scroll = ScrollController();
-  final List<GlobalKey> _sectionKeys = List.generate(9, (_) => GlobalKey());
+  final List<GlobalKey> _sectionKeys = List.generate(10, (_) => GlobalKey());
 
   static const List<_NavItem> _navItems = [
     _NavItem('Overview', 0),
@@ -711,7 +696,8 @@ class _LandingScreenState extends State<LandingScreen> {
     _NavItem('Offering', 5),
     _NavItem('How It Works', 6),
     _NavItem('Dashboard', 7),
-    _NavItem('Launch', 8),
+    _NavItem('Philosophy', 8),
+    _NavItem('Launch', 9),
   ];
 
   void _scrollTo(int index) {
@@ -745,7 +731,6 @@ class _LandingScreenState extends State<LandingScreen> {
               controller: _scroll,
               physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
               slivers: [
-                // Sticky top bar
                 SliverPersistentHeader(
                   pinned: true,
                   delegate: _CMTopBarDelegate(
@@ -753,8 +738,6 @@ class _LandingScreenState extends State<LandingScreen> {
                     navItems: _navItems,
                   ),
                 ),
-
-                // Sections
                 SliverToBoxAdapter(child: _Hero(key: _sectionKeys[0])),
                 SliverToBoxAdapter(child: _AcademicianSection(key: _sectionKeys[1])),
                 SliverToBoxAdapter(child: _StudentsSection(key: _sectionKeys[2])),
@@ -763,11 +746,11 @@ class _LandingScreenState extends State<LandingScreen> {
                 SliverToBoxAdapter(child: _OfferingSection(key: _sectionKeys[5])),
                 SliverToBoxAdapter(child: _HowItWorksSection(key: _sectionKeys[6])),
                 SliverToBoxAdapter(child: _DashboardSection(key: _sectionKeys[7])),
-                SliverToBoxAdapter(child: _LaunchSection(key: _sectionKeys[8])),
+                SliverToBoxAdapter(child: _PhilosophySection(key: _sectionKeys[8])),
+                SliverToBoxAdapter(child: _LaunchSection(key: _sectionKeys[9])),
                 const SliverToBoxAdapter(child: _Footer()),
               ],
             ),
-            // Floating help / quick-tour button
             Positioned(
               right: 16, bottom: 16,
               child: _QuickTourFab(onJump: _scrollTo),
@@ -785,9 +768,6 @@ class _NavItem {
   final int index;
 }
 
-// ---------------------------------------------------------------------------
-//  TOP BAR (sticky) — responsive
-// ---------------------------------------------------------------------------
 class _CMTopBarDelegate extends SliverPersistentHeaderDelegate {
   _CMTopBarDelegate({required this.onNav, required this.navItems});
 
@@ -874,7 +854,7 @@ class _CMTopBarDelegate extends SliverPersistentHeaderDelegate {
                   _PrimaryButton(
                     label: 'Launch Concept',
                     icon: Icons.rocket_launch_rounded,
-                    onTap: () => onNav(8),
+                    onTap: () => onNav(9),
                   )
                 else
                   IconButton(
@@ -945,15 +925,12 @@ class _CMTopBarDelegate extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(covariant _CMTopBarDelegate oldDelegate) => false;
 }
 
-// ---------------------------------------------------------------------------
-//  LOGO — asset-driven (with graceful fallback)
-// ---------------------------------------------------------------------------
 class CMLogo extends StatelessWidget {
   const CMLogo({super.key, this.size = 40});
 
   final double size;
 
-  static const String _asset = 'assets/images/icons/careermate-icon.png';
+  static const String _asset = 'assets/icons/careermate-icon.png';
 
   @override
   Widget build(BuildContext context) {
@@ -994,9 +971,6 @@ class CMLogo extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-//  BUTTONS
-// ---------------------------------------------------------------------------
 class _PrimaryButton extends StatelessWidget {
   const _PrimaryButton({
     required this.label,
@@ -1100,9 +1074,6 @@ class _GhostButton extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-//  SECTION WRAPPER — consistent outer spacing / max width
-// ---------------------------------------------------------------------------
 class _SectionWrap extends StatelessWidget {
   const _SectionWrap({super.key, required this.child, this.bg, this.dense = false});
 
@@ -1128,9 +1099,6 @@ class _SectionWrap extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-//  HERO
-// ---------------------------------------------------------------------------
 class _Hero extends StatelessWidget {
   const _Hero({super.key});
 
@@ -1332,9 +1300,6 @@ class _MiniMetric extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-//  HERO VISUAL — stacked infographic card
-// ---------------------------------------------------------------------------
 class _HeroVisual extends StatelessWidget {
   const _HeroVisual();
 
@@ -1345,7 +1310,6 @@ class _HeroVisual extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          // Base card
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
@@ -1415,7 +1379,6 @@ class _HeroVisual extends StatelessWidget {
               ),
             ),
           ),
-          // Floating badge 1
           Positioned(
             top: -14, right: -10,
             child: _FloatingBadge(
@@ -1424,7 +1387,6 @@ class _HeroVisual extends StatelessWidget {
               color: CMColors.blue,
             ),
           ),
-          // Floating badge 2
           Positioned(
             bottom: -12, left: -12,
             child: _FloatingBadge(
@@ -1530,9 +1492,6 @@ class _FloatingBadge extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-//  ACADEMICIAN SECTION (priority #1)
-// ---------------------------------------------------------------------------
 class _AcademicianSection extends StatelessWidget {
   const _AcademicianSection({super.key});
 
@@ -1652,9 +1611,6 @@ class _AcademicianSection extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-//  STUDENTS / FACULTIES SECTION
-// ---------------------------------------------------------------------------
 class _StudentsSection extends StatelessWidget {
   const _StudentsSection({super.key});
 
@@ -1869,9 +1825,6 @@ class _StepPopupTile extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-//  INSTITUTIONS
-// ---------------------------------------------------------------------------
 class _InstitutionsSection extends StatelessWidget {
   const _InstitutionsSection({super.key});
 
@@ -1895,12 +1848,9 @@ class _InstitutionsSection extends StatelessWidget {
           LayoutBuilder(
             builder: (context, c) {
               final cols = CMResponsive.gridCols(context, phone: 1, tablet: 2, desktop: 4);
-              // FIXED: taller tiles on phone & safe ratios on larger screens.
               final double ratio = cols == 1
-                  ? 2.15            // phone: was 3.1 (overflow) → now 2.15 (safe)
-                  : (cols == 2
-                      ? 1.05        // tablet: was 1.15 → 1.05
-                      : 1.08);      // desktop: was 1.15 → 1.08
+                  ? 2.15
+                  : (cols == 2 ? 1.05 : 1.08);
               final items = <Widget>[
                 CMInfoCard(
                   icon: Icons.campaign_rounded,
@@ -1968,9 +1918,6 @@ class _InstitutionsSection extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-//  INDUSTRIES
-// ---------------------------------------------------------------------------
 class _IndustriesSection extends StatelessWidget {
   const _IndustriesSection({super.key});
 
@@ -2119,9 +2066,6 @@ class _IndustryCard extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-//  OFFERING — 22 opportunity types (academician-first)
-// ---------------------------------------------------------------------------
 class _OfferingSection extends StatelessWidget {
   const _OfferingSection({super.key});
 
@@ -2278,9 +2222,6 @@ class _OfferingTile extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-//  HOW IT WORKS — the full architecture flow
-// ---------------------------------------------------------------------------
 class _HowItWorksSection extends StatelessWidget {
   const _HowItWorksSection({super.key});
 
@@ -2387,14 +2328,10 @@ class _HowItWorksSection extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-//  DASHBOARD
-// ---------------------------------------------------------------------------
 class _DashboardSection extends StatelessWidget {
   const _DashboardSection({super.key});
 
-  @override
-  Widget build(BuildContext context) {
+  @override  Widget build(BuildContext context) {
     return _SectionWrap(
       bg: CMColors.white,
       child: Column(
@@ -2480,9 +2417,508 @@ class _DashboardSection extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-//  LAUNCH / CTA
-// ---------------------------------------------------------------------------
+class _PhilosophySection extends StatelessWidget {
+  const _PhilosophySection({super.key});
+
+  static const String _artAsset = 'assets/images/careermates-philosophy-art-1.jpeg';
+
+  @override
+  Widget build(BuildContext context) {
+    final isPhone = CMResponsive.isPhone(context);
+    final isDesktop = CMResponsive.isDesktop(context);
+
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [CMColors.black, CMColors.blueDeep, CMColors.black],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          stops: [0.0, 0.55, 1.0],
+        ),
+      ),
+      child: _SectionWrap(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CMFadeUp(
+              child: Wrap(
+                spacing: 10, runSpacing: 10,
+                children: const [
+                  CMPill(
+                    label: 'THE CHERRY ON TOP',
+                    bg: CMColors.sandal,
+                    fg: CMColors.black,
+                    dense: true,
+                    icon: Icons.auto_stories_rounded,
+                  ),
+                  CMPill(
+                    label: 'THE PHILOSOPHY',
+                    bg: CMColors.blue,
+                    fg: CMColors.white,
+                    dense: true,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 22),
+            CMFadeUp(
+              delay: const Duration(milliseconds: 60),
+              child: Text(
+                'The gap was never the problem.\nThe conduit was.',
+                style: TextStyle(
+                  color: CMColors.white,
+                  fontSize: isPhone ? 26 : (isDesktop ? 46 : 36),
+                  height: 1.1,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: -1.1,
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            CMFadeUp(
+              delay: const Duration(milliseconds: 120),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 720),
+                child: const Text(
+                  'Michelangelo, on the ceiling of the Sistine Chapel, painted two hands — '
+                  'one reaching from the heavens, one rising from the earth. They never touch. '
+                  'The spark lives in the space between.\n\n'
+                  'We built CareerMate in that space.',
+                  style: TextStyle(
+                    color: Color(0xFFD6DDEE),
+                    fontSize: 15,
+                    height: 1.7,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 30),
+            CMFadeUp(
+              delay: const Duration(milliseconds: 160),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: CMColors.black,
+                        border: Border.all(color: CMColors.sandal.withOpacity(0.28), width: 1),
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: CMColors.sandal.withOpacity(0.14),
+                            blurRadius: 40,
+                            offset: const Offset(0, 18),
+                          ),
+                        ],
+                      ),
+                      child: AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: Image.asset(
+                          _artAsset,
+                          fit: BoxFit.cover,
+                          alignment: Alignment.center,
+                          errorBuilder: (_, __, ___) => Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Icon(Icons.pan_tool_alt_rounded, color: CMColors.sandal, size: 42),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    'careermates-philosophy-art-1.jpeg',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: CMColors.sandal,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: 0.3,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                CMColors.black.withOpacity(0.55),
+                                Colors.transparent,
+                                CMColors.black.withOpacity(0.65),
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              stops: const [0.0, 0.5, 1.0],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: 18, right: 18, bottom: 18,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'The Creation of Adam · reimagined',
+                              style: TextStyle(
+                                color: CMColors.white.withOpacity(0.92),
+                                fontSize: isPhone ? 12 : 13.5,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.2,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: CMColors.sandal,
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                            child: const Text(
+                              'CareerMate',
+                              style: TextStyle(
+                                color: CMColors.black,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 0.3,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 34),
+            LayoutBuilder(
+              builder: (context, c) {
+                final cols = CMResponsive.gridCols(context, phone: 1, tablet: 3, desktop: 3);
+                final ratio = cols == 1
+                    ? 2.4
+                    : (cols == 2 ? 1.3 : 1.05);
+                final cards = <Widget>[
+                  _PhilosophyCard(
+                    numeral: 'I',
+                    title: 'The Hand from Above',
+                    body: 'Knowledge. Intellect. Opportunity. The infinite corpus of human learning that institutions and industries hold — yet rarely extend.',
+                    accent: CMColors.sandal,
+                    onTap: () => _popup(
+                      context,
+                      'The Hand from Above',
+                      Icons.auto_awesome_rounded,
+                      CMColors.sandalDeep,
+                      const [
+                        CMDetailBlock.heading('What it represents'),
+                        CMDetailBlock.chips(['Knowledge', 'Intellect', 'Opportunity', 'Industry', 'Institutions']),
+                        CMDetailBlock.body(
+                          'Everything that has been discovered, built, documented, and taught — '
+                          'the accumulated intellect of our civilisation, held in classrooms, labs, '
+                          'boardrooms, and journals.',
+                        ),
+                      ],
+                    ),
+                  ),
+                  _PhilosophyCard(
+                    numeral: 'II',
+                    title: 'The Hand from Below',
+                    body: 'Every academician, student, faculty, and learner — reaching upward, endlessly, for the spark that closes the distance.',
+                    accent: CMColors.blue,
+                    onTap: () => _popup(
+                      context,
+                      'The Hand from Below',
+                      Icons.pan_tool_alt_rounded,
+                      CMColors.blue,
+                      const [
+                        CMDetailBlock.heading('What it represents'),
+                        CMDetailBlock.chips(['Academicians', 'Students', 'Faculties', 'Institutions', 'Industries']),
+                        CMDetailBlock.body(
+                          'The aspiration of every mind on this platform — to be seen, '
+                          'to be matched, to be given the right opportunity at the right moment, '
+                          'in the right direction.',
+                        ),
+                      ],
+                    ),
+                  ),
+                  _PhilosophyCard(
+                    numeral: 'III',
+                    title: 'The Spark Between',
+                    body: 'CareerMate. Not the knowledge. Not the seeker. But the living conduit that lets the two finally meet — in the space where genius is born.',
+                    accent: CMColors.green,
+                    onTap: () => _popup(
+                      context,
+                      'The Spark Between',
+                      Icons.bolt_rounded,
+                      CMColors.green,
+                      const [
+                        CMDetailBlock.heading('What CareerMate is'),
+                        CMDetailBlock.body(
+                          'Not a job board. Not a course catalogue. Not a social network. '
+                          'A conduit — a keyword-driven, role-aware engine that turns '
+                          'the gap between aspiration and opportunity into a bridge.',
+                        ),
+                        CMDetailBlock.chips(['Match', 'Connect', 'Elevate', 'Track']),
+                      ],
+                    ),
+                  ),
+                ];
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: cols,
+                    mainAxisSpacing: 14,
+                    crossAxisSpacing: 14,
+                    childAspectRatio: ratio,
+                  ),
+                  itemCount: cards.length,
+                  itemBuilder: (context, i) => CMFadeUp(
+                    delay: Duration(milliseconds: 60 * i),
+                    child: cards[i],
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 34),
+            CMFadeUp(
+              child: Container(
+                padding: EdgeInsets.all(isPhone ? 20 : 28),
+                decoration: BoxDecoration(
+                  color: CMColors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(22),
+                  border: Border.all(color: CMColors.sandal.withOpacity(0.20)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: const [
+                        Icon(Icons.format_quote_rounded, color: CMColors.sandal, size: 26),
+                        SizedBox(width: 10),
+                        Text(
+                          'THE APHORISM',
+                          style: TextStyle(
+                            color: CMColors.sandal,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.4,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+                    Text(
+                      '"We did not paint a bridge.\nWe built the space where the fingers almost meet — and let the spark do the rest."',
+                      style: TextStyle(
+                        color: CMColors.white,
+                        fontSize: isPhone ? 16 : 20,
+                        height: 1.5,
+                        fontWeight: FontWeight.w600,
+                        fontStyle: FontStyle.italic,
+                        letterSpacing: -0.2,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    const Text(
+                      '— The CareerMate Philosophy',
+                      style: TextStyle(
+                        color: Color(0xFF9AA2B4),
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            CMFadeUp(
+              child: Wrap(
+                spacing: 12, runSpacing: 12,
+                children: [
+                  _PrimaryButton(
+                    label: 'Read the full philosophy',
+                    icon: Icons.menu_book_rounded,
+                    bg: CMColors.sandal,
+                    fg: CMColors.black,
+                    onTap: () => showCMDetail(
+                      context,
+                      eyebrow: 'The CareerMate Philosophy',
+                      title: 'On hands, sparks, and the space between',
+                      icon: Icons.auto_stories_rounded,
+                      accent: CMColors.sandalDeep,
+                      blocks: const [
+                        CMDetailBlock.heading('I · The Predicament'),
+                        CMDetailBlock.body(
+                          'For centuries, knowledge has lived in the hands of the few — '
+                          'institutions, guilds, industries, archives. And for centuries, '
+                          'the hands reaching for it have remained just short of touching.',
+                        ),
+                        CMDetailBlock.heading('II · The Illusion of Distance'),
+                        CMDetailBlock.body(
+                          'The distance between knowledge and its seeker was never physical. '
+                          'It was structural — an absence of conduit. Every generation '
+                          'mistook this gap for fate.',
+                        ),
+                        CMDetailBlock.heading('III · The Conduit'),
+                        CMDetailBlock.body(
+                          'CareerMate does not pretend to be the spark. It refuses that vanity. '
+                          'It is the engineered space — precise, deliberate, alive — in which '
+                          'the spark is finally given permission to exist.',
+                        ),
+                        CMDetailBlock.heading('IV · The Consequence'),
+                        CMDetailBlock.body(
+                          'When the conduit is right, the hands no longer need to touch. '
+                          'The academician finds the industry. The student finds the mentor. '
+                          'The institution finds the researcher. The researcher finds the question. '
+                          'The question finds its answer.',
+                        ),
+                        CMDetailBlock.chips([
+                          'Knowledge', 'Aspiration', 'Conduit', 'Spark', 'Elevation',
+                        ]),
+                      ],
+                    ),
+                  ),
+                  _PrimaryButton(
+                    label: 'See the original metaphor',
+                    icon: Icons.image_rounded,
+                    bg: CMColors.blue,
+                    onTap: () => showCMDetail(
+                      context,
+                      eyebrow: 'The Metaphor',
+                      title: 'The Creation of Adam',
+                      icon: Icons.image_rounded,
+                      accent: CMColors.blue,
+                      blocks: const [
+                        CMDetailBlock.body(
+                          'Painted by Michelangelo around 1511 on the ceiling of the Sistine Chapel. '
+                          'God extends a finger; Adam extends his. They almost meet. '
+                          'The entire theology of creation is captured in that unfilled space.',
+                        ),
+                        CMDetailBlock.heading('Why we borrowed it'),
+                        CMDetailBlock.bullets([
+                          'Because the most important moment in any connection is not the contact — it is the reaching.',
+                          'Because no platform should claim to be the knowledge. Only the space where knowledge becomes accessible.',
+                          'Because every academician alive has felt the ache of an almost-touch.',
+                        ]),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PhilosophyCard extends StatelessWidget {
+  const _PhilosophyCard({
+    required this.numeral,
+    required this.title,
+    required this.body,
+    required this.accent,
+    required this.onTap,
+  });
+
+  final String numeral;
+  final String title;
+  final String body;
+  final Color accent;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        child: Ink(
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            color: CMColors.white.withOpacity(0.04),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: accent.withOpacity(0.28)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                numeral,
+                style: TextStyle(
+                  color: accent,
+                  fontSize: 26,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: -0.6,
+                  height: 1.0,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: CMColors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.2,
+                  height: 1.25,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Expanded(
+                child: Text(
+                  body,
+                  maxLines: 5,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Color(0xFFC8CDDA),
+                    fontSize: 12.5,
+                    height: 1.5,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Text(
+                    'Reflect',
+                    style: TextStyle(
+                      color: accent,
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.4,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Icon(Icons.arrow_forward_rounded, size: 13, color: accent),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _LaunchSection extends StatelessWidget {
   const _LaunchSection({super.key});
 
@@ -2597,9 +3033,6 @@ class _LaunchSection extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-//  FOOTER — hardened against overflow at narrow widths
-// ---------------------------------------------------------------------------
 class _Footer extends StatelessWidget {
   const _Footer({super.key});
 
@@ -2728,9 +3161,6 @@ class _FooterStacked extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-//  QUICK TOUR FAB
-// ---------------------------------------------------------------------------
 class _QuickTourFab extends StatefulWidget {
   const _QuickTourFab({required this.onJump});
   final void Function(int) onJump;
@@ -2843,7 +3273,8 @@ class _QuickTourFabState extends State<_QuickTourFab>
                         _tourTile(ctx, 'Opportunity Types', Icons.grid_view_rounded, CMColors.blue, 5, isPhone),
                         _tourTile(ctx, 'How It Works', Icons.account_tree_rounded, CMColors.green, 6, isPhone),
                         _tourTile(ctx, 'Live Dashboard', Icons.insights_rounded, CMColors.sandalDeep, 7, isPhone),
-                        _tourTile(ctx, 'Launch / Recap', Icons.rocket_rounded, CMColors.blueDeep, 8, isPhone),
+                        _tourTile(ctx, 'Philosophy', Icons.auto_stories_rounded, CMColors.sandalDeep, 8, isPhone),
+                        _tourTile(ctx, 'Launch / Recap', Icons.rocket_rounded, CMColors.blueDeep, 9, isPhone),
                       ],
                     ),
                   ),
@@ -2905,8 +3336,5 @@ class _QuickTourFabState extends State<_QuickTourFab>
   }
 }
 
-// ---------------------------------------------------------------------------
-//  Unused-import guard (dart:math kept for potential future use)
-// ---------------------------------------------------------------------------
 // ignore: unused_element
 double _cmNoopMath(double x) => math.max(x, 0);
